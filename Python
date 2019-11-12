@@ -1,0 +1,41 @@
+# This program draws a ball and allows it to go in a line
+from visual import *
+from visual.graph import *
+#
+# Define the attributes of the mass m1
+m2=sphere(pos=(0,0,0),radius=0.1,color=color.blue,mass=10000)
+m1=sphere(pos=(-1,0,0),radius=0.1,color=color.blue,mass=1)
+dt=0.05 # time of each step
+m1.acc=(0,0,0) # initial acceleration of mass
+m1.vel=vector(0,120,0) # initial velocity of mass
+# define trails for the motion of m1
+m1.trail=curve(color=m1.color)
+maxtsteps=100 # maximum number of time steps
+import numpy as np
+import time
+print "simulated time will be ",maxtsteps*dt," seconds."
+# set-up the graph (colors, axis titles, etc.)
+trajplot=gdisplay(x=0,y=0,width=800,height=400,
+        title="y vs x", xtitle="x position",
+        ytitle="y position",
+        xmin=-5.5, xmax=5, ymin=0, ymax=25,
+        foreground=color.black, background=color.white)
+xypoints=[] # initialize the list of (x,y) data
+for tstep in range(1,maxtsteps):
+    rate(1000) # slow rate of computation so we can visualize it
+    # update the position
+    m1.posold=m1.pos
+    m1.acc=-10000*m1.pos/(math.sqrt(sum(i**2 for i in m1.pos))**3)
+    m1.vel=m1.acc*dt+m1.vel
+    m1.posnew=m1.pos+m1.vel*dt+0.5*pow(dt, 2)*m1.acc
+    # update the arrows and trails
+    m1.trail.append(pos=m1.pos)
+    # record the x and y value of this new point in xypoints
+    xypoints.append((m1.pos.x,m1.pos.y))
+    # show the (x,y) data in case you need it later
+    while x>-1:
+        T=time
+    print T
+print xypoints
+# plot the graph of (x,y) data
+xyplot=gdots(pos=xypoints,color=color.blue)
